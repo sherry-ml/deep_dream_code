@@ -14,7 +14,7 @@ import torch.nn.functional as F
 class BasicBlock(nn.Module):
     expansion = 1
 
-    def __init__(self, in_planes, planes, stride=1, dropout):
+    def __init__(self, dropout,in_planes, planes, stride=1):
         super(BasicBlock, self).__init__()
         self.conv1 = nn.Sequential(nn.Conv2d(in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False),
                                    nn.BatchNorm2d(planes),
@@ -69,7 +69,7 @@ class ResNet(nn.Module):
         strides = [stride] + [1]*(num_blocks-1)
         layers = []
         for stride in strides:
-            layers.append(block(self.in_planes, planes, stride, dropout))
+            layers.append(block(dropout,self.in_planes, planes, stride))
             self.in_planes = planes * block.expansion
         return nn.Sequential(*layers)
 
