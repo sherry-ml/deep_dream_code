@@ -144,4 +144,4 @@ def train_test_model(model, trainloader, testloader, norm_type='BN', EPOCHS=20, 
         wrong_prediction_list.append((images[j], pred[j].item(), labels[j].item()))
 
   print(f'Total Number of incorrectly predicted images by model type {norm_type} is {len(wrong_prediction_list)}')
-  return model
+  return model, train_losses,test_losses,wrong_prediction_list
