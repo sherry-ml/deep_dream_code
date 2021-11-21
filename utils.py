@@ -203,7 +203,7 @@ def generate_gradcam(misclassified_images, model, target_layers,device):
     gcam.remove_hook()
     return layers, probs, ids
 
-def plot_gradcam(gcam_layers, target_layers, class_names, image_size,predicted, misclassified_images):
+def plot_gradcam(gcam_layers, target_layers, class_names, image_size,predicted, misclassified_images, mean,std):
     
     images=[]
     labels=[]
@@ -225,7 +225,10 @@ def plot_gradcam(gcam_layers, target_layers, class_names, image_size,predicted, 
       plt.axis('off')
 
       for j in range(len(images)):
-        img = np.uint8(255*helper.unnormalize(images[j].view(image_size)))
+        for k in range(images[j].shape[0]):
+          images[j][k] = images[j][k] * std[k] + mean[k]
+        images[j] = np.transpose(images[j], (1,2,0))
+        img = np.uint8(255*images[j])
         if i==0:
           ax = plt.subplot(r, c, j+2)
           ax.text(0, 0.2, f"actual: {class_names[labels[j]]} \npredicted: {class_names[predicted[j][0]]}", fontsize=12)
