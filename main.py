@@ -110,7 +110,7 @@ def train_test_model(model, opt_model, trainloader, testloader, norm_type='BN', 
   print(model)
   if(opt_model=='Adam'):
     optimizer = Adam(model.parameters(), lr=lr)
-   else:
+  else:
     optimizer = SGD(model.parameters(), lr=lr, momentum=0.9)
   #scheduler = OneCycleLR(optimizer, max_lr=0.05,epochs=EPOCHS,steps_per_epoch=len(trainloader))
   if(norm_type == 'BN'):
