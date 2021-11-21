@@ -7,6 +7,7 @@ import torchvision.transforms as transforms
 from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
 from torch.optim import Adam
+from torch.optim import SGD
 import numpy as np
 from torch.optim.lr_scheduler import StepLR,OneCycleLR
 from tqdm import tqdm
@@ -95,7 +96,7 @@ def test(model, device, test_loader,test_losses, test_acc,epoch):
     test_acc.append(100. * correct / len(test_loader.dataset))
     return accuracy_epoch
 
-def train_test_model(model, trainloader, testloader, norm_type='BN', EPOCHS=20, dropout=0.1, lr=0.001, device='cpu'):
+def train_test_model(model, opt_model, trainloader, testloader, norm_type='BN', EPOCHS=20, dropout=0.1, lr=0.001, device='cpu'):
 
   train_losses_BN = []
   test_losses_BN = []
@@ -107,7 +108,10 @@ def train_test_model(model, trainloader, testloader, norm_type='BN', EPOCHS=20, 
   lambda_l1 = 0
   #model =  Net(dropout, norm_type).to(device)
   print(model)
-  optimizer = Adam(model.parameters(), lr=lr)
+  if(opt_model=='Adam'):
+    optimizer = Adam(model.parameters(), lr=lr)
+   else:
+    optimizer = SGD(model.parameters(), lr=lr, momentum=0.9)
   #scheduler = OneCycleLR(optimizer, max_lr=0.05,epochs=EPOCHS,steps_per_epoch=len(trainloader))
   if(norm_type == 'BN'):
     train_losses = train_losses_BN
