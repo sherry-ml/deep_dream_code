@@ -45,9 +45,7 @@ def set_compose_params(mean, std):
   cutout_prob= 0.5
 
   transform_train = A.Compose(
-    [#A.HorizontalFlip(p=horizontalflip_prob),
-     #A.ShiftScaleRotate(shift_limit=0.1, scale_limit=0.1, rotate_limit=rotate_limit, p=shiftscalerotate_prob),
-     A.RandomCrop(width=32, height=32, p=4)
+    [A.RandomCrop(width=32, height=32, p=4)
      A.CoarseDropout(max_holes=num_holes,min_holes = 1, max_height=16, max_width=16, 
      p=cutout_prob,fill_value=tuple([x * 255.0 for x in mean]),
      min_height=16, min_width=16, mask_fill_value = None),
