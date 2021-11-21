@@ -12,8 +12,8 @@ from torch.optim.lr_scheduler import StepLR,OneCycleLR
 from tqdm import tqdm
 
 
-from models import resnet
-from models.resnet import ResNet18, ResNet34
+#from models import resnet
+#from models.resnet import ResNet18, ResNet34
 
 
 def train(model, device, train_loader, optimizer, epoch, train_losses, train_acc, lambda_l1):
