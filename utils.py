@@ -225,6 +225,7 @@ def plot_gradcam(gcam_layers, target_layers, class_names, image_size,predicted, 
       plt.axis('off')
 
       for j in range(len(images)):
+        images[j] = images[j].cpu().numpy().astype(dtype=np.float32)
         for k in range(images[j].shape[0]):
           images[j][k] = images[j][k] * std[k] + mean[k]
         images[j] = np.transpose(images[j], (1,2,0))
