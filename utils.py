@@ -225,11 +225,11 @@ def plot_gradcam(gcam_layers, target_layers, class_names, image_size,predicted, 
       plt.axis('off')
 
       for j in range(len(images)):
-        images[j] = images[j].cpu().numpy().astype(dtype=np.float32)
-        for k in range(images[j].shape[0]):
-          images[j][k] = images[j][k] * std[k] + mean[k]
-        images[j] = np.transpose(images[j], (1,2,0))
-        img = np.uint8(255*images[j])
+        image_cpu = images[j].cpu().numpy().astype(dtype=np.float32)
+        for k in range(image_cpu.shape[0]):
+          image_cpu[k] = image_cpu[k] * std[k] + mean[k]
+        image_cpu = np.transpose(image_cpu, (1,2,0))
+        img = np.uint8(255*image_cpu)
         if i==0:
           ax = plt.subplot(r, c, j+2)
           ax.text(0, 0.2, f"actual: {class_names[labels[j]]} \npredicted: {class_names[predicted[j][0]]}", fontsize=12)
