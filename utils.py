@@ -280,7 +280,7 @@ def torch_device(dev_stat):
   print(device)
   return device
 
-def view_model_summary(test_model):
+def view_model_summary(test_model,device):
   test_model = test_model.to(device)
   summary(test_model, input_size=(3, 32, 32))
   print(test_model)
