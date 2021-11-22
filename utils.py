@@ -286,7 +286,7 @@ def view_model_summary(test_model,device):
   summary(test_model, input_size=(3, 32, 32))
   print(test_model)
   
-def display_incorrect_images(ll, n=10 ):
+def display_incorrect_images(ll,std, mean, n=10 ):
   import matplotlib.pyplot as plt
   display_images = ll[:n]
   index = 0
