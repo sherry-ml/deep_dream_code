@@ -248,3 +248,76 @@ def plot_gradcam(gcam_layers, target_layers, class_names, image_size,predicted, 
         
         plt.axis('off')
     plt.show()
+
+def show_sample_img(loader, classes, n):
+  import matplotlib.pyplot as plt
+  import numpy as np
+
+# functions to show an image
+
+
+  def imshow(img):
+    img = img / 2 + 0.5     # unnormalize
+    npimg = img.numpy()
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+
+
+# get some random training images
+  dataiter = iter(loader)
+  images, labels = dataiter.next()
+  p = images.shape[0]
+  if(n<p):
+    p=n
+
+# show images
+  imshow(torchvision.utils.make_grid(images[:p]))
+# print labels
+  print(' '.join('%5s' % classes[labels[j]] for j in range(p)))
+  
+  
+def torch_device(dev_stat):
+  device = "cuda" if dev_stat else "cpu"
+  print(device)
+  return device
+
+def view_model_summary(test_model):
+  test_model = test_model.to(device)
+  summary(test_model, input_size=(3, 32, 32))
+  print(test_model)
+  
+def display_incorrect_images(ll, n=10 ):
+  import matplotlib.pyplot as plt
+  display_images = ll[:n]
+  index = 0
+  fig = plt.figure(figsize=(10,14))
+  for img in display_images:
+    image = img[0].squeeze().to('cpu').numpy()
+    for i in range(image.shape[0]):
+      image[i] = image[i]*std[i] + mean[i]
+    pred = classes[img[1]]
+    actual = classes[img[2]]
+    ax = fig.add_subplot(5, 2, index+1)
+    ax.axis('off')
+    ax.set_title(f'\n Predicted Label {pred} \n Actual Label : {actual}',fontsize=10) 
+    ax.imshow(np.transpose(image,(1,2,0)), cmap='gray_r')
+    index = index + 1
+  plt.show()
+  
+def show_plots(train_losses, test_losses):
+  import matplotlib.pyplot as plt
+  fig, axs = plt.subplots(1,2,figsize=(15,5))
+
+  axs[0].plot(train_losses, label='Train_losses')
+  axs[0].legend(loc='upper right')
+  axs[0].set_xlabel('Epochs')
+  axs[0].set_ylabel('Train_loss')
+  axs[0].set_title("Training Loss")
+
+  axs[1].plot(test_losses, label='Test_losses')
+  axs[1].legend(loc='upper right')
+  axs[1].set_xlabel('Epochs')
+  axs[1].set_ylabel('Test Loss')
+  axs[1].set_title("Test Loss")
+
+  plt.show()
+  
