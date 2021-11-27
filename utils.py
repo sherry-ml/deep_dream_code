@@ -38,17 +38,13 @@ class C_10_DS(torchvision.datasets.CIFAR10):
 
 
 def set_compose_params(mean, std):
-  horizontalflip_prob= 0.2
-  rotate_limit= 15
-  shiftscalerotate_prob= 0.25
-  num_holes= 1
-  cutout_prob= 0.5
+  
 
   transform_train = A.Compose(
-    [A.RandomCrop(width=32, height=32, p=4),
-     A.CoarseDropout(max_holes=num_holes,min_holes = 1, max_height=16, max_width=16, 
-     p=cutout_prob,fill_value=tuple([x * 255.0 for x in mean]),
-     min_height=16, min_width=16, mask_fill_value = None),
+    [A.PadIfNeeded(min_height=40, max_width=40, always_apply=True),
+     A.RandomCrop(width=32, height=32),
+     A.HorizontalFlip(),
+     A.CutOut(num_holes=1, max_h_size=8, max_w_size=8),
      A.Normalize(mean = mean, std = std, max_pixel_value=255, always_apply = True),
      ToTensorV2()
     ])
@@ -67,9 +63,9 @@ def set_compose_params(mean, std):
 
 def tl_ts_mod(transform_train,transform_valid):
   trainset = C_10_DS(root='./data', train=True, download=True, transform=transform_train)
-  trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
+  trainloader = torch.utils.data.DataLoader(trainset, batch_size=512, shuffle=True, num_workers=2)
   testset = C_10_DS(root='./data', train=False, download=True, transform=transform_valid)
-  testloader = torch.utils.data.DataLoader(testset, batch_size=128, shuffle=False, num_workers=2)
+  testloader = torch.utils.data.DataLoader(testset, batch_size=512, shuffle=False, num_workers=2)
   return trainset,trainloader,testset,testloader
 
 
