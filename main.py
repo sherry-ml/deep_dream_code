@@ -51,6 +51,7 @@ def train(oclr, model, device, train_loader, optimizer, epoch, scheduler, train_
     optimizer.step()
     if(oclr==True):
       scheduler.step()
+      #print("OCLR in action")
 
     # Update pbar-tqdm
     
@@ -92,7 +93,7 @@ def test(model, device, test_loader,test_losses, test_acc,epoch):
     test_acc.append(100. * correct / len(test_loader.dataset))
     return accuracy_epoch
   
-def train_test_model(optim, oclr, model, trainloader, testloader, norm_type='BN', EPOCHS=20, max_epoch=5, lr=0.001, lrmax=0.5, device='cpu'):
+def train_test_model(opt, oclr, model, trainloader, testloader, norm_type='BN', EPOCHS=20, max_epoch=5, lrmax=0.05, device='cpu'):
 
   train_losses_BN = []
   test_losses_BN = []
@@ -105,13 +106,14 @@ def train_test_model(optim, oclr, model, trainloader, testloader, norm_type='BN'
   lambda_l1 = 0
   model =  model.to(device)
   print(model)
-  if(optim=='Adam'):
-    optimizer = Adam(model.parameters(), lr=lr)
+  if(opt=='Adam'):
+    optimizer = Adam(model.parameters(), lr=lrmax)
   else:
-    optimizer = SGD(model.parameters(), lr=lr, momentum=0.90)
+    optimizer = SGD(model.parameters(), lr=lrmax, momentum=0.9)
     print(f'optimizer defined is {optim}')
   if(oclr==True):
     scheduler = OneCycleLR(optimizer=optimizer, max_lr=lrmax, epochs=EPOCHS, steps_per_epoch=len(trainloader), pct_start=max_epoch/EPOCHS, div_factor=10)
+    print(f'lrmax value is {lrmax}')
   #scheduler = OneCycleLR(optimizer, max_lr=0.05,epochs=EPOCHS,steps_per_epoch=len(trainloader))
   if(norm_type == 'BN'):
     train_losses = train_losses_BN
