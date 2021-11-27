@@ -6,11 +6,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from torch_lr_finder import LRFinder
 
-def find_lr(model,train_loader, test_loader, start_lr, end_lr, epochs):
+def find_lr(optim, model,train_loader, test_loader, start_lr, end_lr, epochs):
   lr_epochs = epochs
   num_iterations = len(test_loader) * lr_epochs
   criterion = nn.CrossEntropyLoss()
-  optimizer = optim.SGD(model.parameters(), lr=start_lr, momentum=0.90)
+  if(optim=='Adam'):
+    optimizer = optim.Adam(model.parameters(), lr=start_lr)
+  else:
+    optimizer = optim.SGD(model.parameters(), lr=start_lr, momentum=0.90)
   lr_finder = LRFinder(model, optimizer, criterion, device="cuda")
   lr_finder.range_test(train_loader, val_loader=test_loader, end_lr=end_lr, num_iter=num_iterations, step_mode="linear",diverge_th=50)
         
