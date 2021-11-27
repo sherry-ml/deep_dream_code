@@ -13,7 +13,7 @@ from torch.optim.lr_scheduler import StepLR,OneCycleLR
 from tqdm import tqdm
 
 
-def train(model, device, train_loader, optimizer, epoch, train_losses, train_acc, lambda_l1):
+def train(oclr, model, device, train_loader, optimizer, epoch, scheduler, train_losses, train_acc, lambda_l1):
 
   model.train()
   pbar = tqdm(train_loader)
@@ -49,7 +49,8 @@ def train(model, device, train_loader, optimizer, epoch, train_losses, train_acc
     # Backpropagation
     loss.backward()
     optimizer.step()
-    #scheduler.step()
+    if(oclr==True):
+      scheduler.step()
 
     # Update pbar-tqdm
     
@@ -91,19 +92,25 @@ def test(model, device, test_loader,test_losses, test_acc,epoch):
     test_acc.append(100. * correct / len(test_loader.dataset))
     return accuracy_epoch
   
-def train_test_model(model, trainloader, testloader, norm_type='BN', EPOCHS=20, dropout=0.1, lr=0.001, device='cpu'):
+def train_test_model(optim, oclr, model, trainloader, testloader, norm_type='BN', EPOCHS=20, max_epoch, lr=0.001, lrmax, device='cpu'):
 
   train_losses_BN = []
   test_losses_BN = []
   train_acc_BN = []
   test_acc_BN = []
   wrong_predictions_BN = []
+  scheduler = None
 
   torch.manual_seed(42)
   lambda_l1 = 0
   model =  model.to(device)
   print(model)
-  optimizer = Adam(model.parameters(), lr=lr)
+  if(optim=='Adam'):
+    optimizer = Adam(model.parameters(), lr=lr)
+  else:
+    optimizer = SGD(model.parameters(), lr=lr, momentum=0.90)
+  if(oclr==True):
+    scheduler = OneCycleLR(optimizer=optimizer, max_lr=lrmax, epochs=EPOCHS, steps_per_epoch=len(trainloader), pct_start=max_epoch/EPOCHS, div_factor=10)
   #scheduler = OneCycleLR(optimizer, max_lr=0.05,epochs=EPOCHS,steps_per_epoch=len(trainloader))
   if(norm_type == 'BN'):
     train_losses = train_losses_BN
@@ -127,8 +134,9 @@ def train_test_model(model, trainloader, testloader, norm_type='BN', EPOCHS=20, 
   
   for epoch in range(EPOCHS):
     print("EPOCH:", epoch)
-    #train(model, device, trainloader, optimizer, epoch, scheduler,train_losses, train_acc, lambda_l1)
-    train(model, device, trainloader, optimizer, epoch, train_losses, train_acc, lambda_l1)
+    
+    train(oclr, model, device, trainloader, optimizer, epoch, scheduler,train_losses, train_acc, lambda_l1)
+    #train(model, device, trainloader, optimizer, epoch, train_losses, train_acc, lambda_l1)
     eval_test_acc = test(model, device, testloader, test_losses, test_acc, epoch)
   
   model.eval()
