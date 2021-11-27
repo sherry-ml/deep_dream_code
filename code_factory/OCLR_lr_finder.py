@@ -1,4 +1,9 @@
 
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import matplotlib.pyplot as plt
+import numpy as np
 from torch_lr_finder import LRFinder
 
 def find_lr(model,train_loader, test_loader, start_lr, end_lr, epochs):
