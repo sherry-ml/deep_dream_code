@@ -16,6 +16,7 @@ def find_lr(model,train_loader, test_loader, start_lr, end_lr, epochs):
         
   # Plot
   max_lr = lr_finder.history['lr'][lr_finder.history['loss'].index(lr_finder.best_loss)]
+  lr_finder.plot(suggest_lr=True,skip_start=0, skip_end=0)
   # Reset graph
   lr_finder.reset()
   return max_lr
