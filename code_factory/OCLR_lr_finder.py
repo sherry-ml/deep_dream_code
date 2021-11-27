@@ -1,7 +1,7 @@
 
 from torch_lr_finder import LRFinder
 
-def find_lr(self,model,train_loader, test_loader, start_lr, end_lr, epochs):
+def find_lr(model,train_loader, test_loader, start_lr, end_lr, epochs):
   lr_epochs = epochs
   num_iterations = len(test_loader) * lr_epochs
   criterion = nn.CrossEntropyLoss()
