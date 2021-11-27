@@ -110,7 +110,7 @@ def train_test_model(opt, oclr, model, trainloader, testloader, norm_type='BN', 
     optimizer = Adam(model.parameters(), lr=lrmax)
   else:
     optimizer = SGD(model.parameters(), lr=lrmax, momentum=0.9)
-    print(f'optimizer defined is {optim}')
+    print(f'optimizer defined is {opt}')
   if(oclr==True):
     scheduler = OneCycleLR(optimizer=optimizer, max_lr=lrmax, epochs=EPOCHS, steps_per_epoch=len(trainloader), pct_start=max_epoch/EPOCHS, div_factor=10)
     print(f'lrmax value is {lrmax}')
