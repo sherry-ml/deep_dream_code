@@ -44,7 +44,7 @@ def set_compose_params(mean, std):
     [A.PadIfNeeded(min_height=40, min_width=40, always_apply=True),
      A.RandomCrop(width=32, height=32),
      A.HorizontalFlip(),
-     A.CutOut(num_holes=1, max_h_size=8, max_w_size=8),
+     A.Cutout(num_holes=1, max_h_size=8, max_w_size=8),
      A.Normalize(mean = mean, std = std, max_pixel_value=255, always_apply = True),
      ToTensorV2()
     ])
