@@ -58,8 +58,8 @@ class Custom_ResNet(nn.Module):
     out = self.prep(x)
     
     out = self.layer1(out)
-	r1  = self.res1(out)
-	out = out + r1
+    r1  = self.res1(out)
+    out = out + r1
     
     out = self.layer2(out)
     
