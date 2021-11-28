@@ -141,6 +141,8 @@ def train_test_model(opt, oclr, model, trainloader, testloader, norm_type='BN', 
     train(oclr, model, device, trainloader, optimizer, epoch, scheduler,train_losses, train_acc, lambda_l1)
     #train(model, device, trainloader, optimizer, epoch, train_losses, train_acc, lambda_l1)
     eval_test_acc = test(model, device, testloader, test_losses, test_acc, epoch)
+    if(eval_test_acc >= 93):
+      break
   
   model.eval()
   for images, labels in testloader:
@@ -153,4 +155,4 @@ def train_test_model(opt, oclr, model, trainloader, testloader, norm_type='BN', 
         wrong_prediction_list.append((images[j], pred[j].item(), labels[j].item()))
 
   print(f'Total Number of incorrectly predicted images by model type {norm_type} is {len(wrong_prediction_list)}')
-  return model, train_losses,test_losses,wrong_prediction_list
+  return model, train_losses,test_losses,wrong_prediction_list, eval_test_acc
