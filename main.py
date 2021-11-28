@@ -141,8 +141,8 @@ def train_test_model(opt, oclr, model, trainloader, testloader, norm_type='BN', 
     train(oclr, model, device, trainloader, optimizer, epoch, scheduler,train_losses, train_acc, lambda_l1)
     #train(model, device, trainloader, optimizer, epoch, train_losses, train_acc, lambda_l1)
     eval_test_acc = test(model, device, testloader, test_losses, test_acc, epoch)
-    if(eval_test_acc >= 93):
-      break
+    #if(eval_test_acc >= 93):
+     # break
   
   model.eval()
   for images, labels in testloader:
