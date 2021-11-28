@@ -85,7 +85,7 @@ def test(model, device, test_loader,test_losses, test_acc,epoch):
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
     accuracy_epoch = 100. * correct / len(test_loader.dataset)
-    if(accuracy_epoch > 85):
+    if(accuracy_epoch > 93):
       model_name_file = "Session7_assignment_epoch_" + str(epoch) + "_acc_" + str(round(accuracy_epoch,2)) + ".pth"
       path = "/content/drive/MyDrive/EVA7/Session_7/" + model_name_file
       torch.save(model.state_dict(), path)
