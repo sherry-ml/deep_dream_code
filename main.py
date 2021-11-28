@@ -120,7 +120,7 @@ def train_test_model(opt, oclr, model, trainloader, testloader, norm_type='BN', 
     train_acc    = train_acc_BN
     test_losses  = test_losses_BN
     test_acc     = test_acc_BN
-    lambda_l1 = 0.002
+    #lambda_l1 = 0.002
     wrong_prediction_list = wrong_predictions_BN
   elif(norm_type == 'LN'):
     train_losses = train_losses_LN
