@@ -6,6 +6,7 @@ import numpy as np
 from torch_lr_finder import LRFinder
 from deep_dream_code.models.custom_resnet import Custom_ResNet
 from deep_dream_code.code_factory.OCLR_lr_finder import find_lr
+from deep_dream_code.main import train, test, train_test_model
 
 def pipeline_tune_lr_train_model(list_end_lr, trainloader_mod, testloader_mod, total_epoch, max_epoch,  opt, oclr, device):
   for lr in list_end_lr:
